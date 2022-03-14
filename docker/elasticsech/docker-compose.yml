@@ -1,0 +1,82 @@
+version: '3.8'
+services:
+  esm01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    container_name: esm01
+    ports:
+      - "9200:9200"
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment:
+      ES_SETTING_BOOTSTRAP_MEMORY__LOCK: "true"
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m -Xlog:disable"
+      node.name: esm01
+      node.roles: master
+      network.host: 0.0.0.0
+      cluster.name: es-cluster
+      cluster.initial_master_nodes: esm01
+      discovery.seed_hosts: esm01,esd01,esd02
+      xpack.security.enabled: "false"
+      xpack.monitoring.collection.enabled: "false"
+  esd01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    container_name: esd01
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment:
+      ES_SETTING_BOOTSTRAP_MEMORY__LOCK: "true"
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m -Xlog:disable"
+      node.name: esd01
+      node.roles: data,ingest
+      cluster.name: es-cluster
+      cluster.initial_master_nodes: esm01
+      discovery.seed_hosts: esm01,esd01,esd02
+      xpack.security.enabled: "false"
+      xpack.monitoring.collection.enabled: "false"
+  esd02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    container_name: esd02
+    volumes:
+      - data03:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment:
+      ES_SETTING_BOOTSTRAP_MEMORY__LOCK: "true"
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m -Xlog:disable"
+      node.name: esd02
+      node.roles: data,ingest
+      cluster.name: es-cluster
+      cluster.initial_master_nodes: esm01
+      discovery.seed_hosts: esm01,esd01,esd02
+      xpack.security.enabled: "false"
+      xpack.monitoring.collection.enabled: "false"
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.16.2
+    container_name: metricbeat
+    environment:
+      ELASTICSEARCH_HOSTS: http://esm01:9200
+    volumes:
+      - ./config/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+
+volumes:
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: loggin
