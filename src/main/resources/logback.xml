@@ -5,9 +5,20 @@
         <encoder>
             <pattern>%magenta([%d{yyyy:MM:dd HH:mm:ss.SSS}]) %highlight([%5level]) [%X{t.id}] %highlight([%7X{l.type}]) %-55cyan([%logger{36}:%L]) : %msg %n</pattern>
         </encoder>
+        <springProfile name="json">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <customFields>{"appName":"${appName}"}</customFields>
+            </encoder>
+        </springProfile>
+    </appender>
+
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH" />
     </root>
 </configuration>
