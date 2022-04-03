@@ -23,11 +23,11 @@ public class LoggingController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> postLogging(@RequestBody PostLoggingRequestDto postLoggingRequestDto) {
+    public ResponseEntity<PostLoggingRequestDto> postLogging(@RequestBody PostLoggingRequestDto postLoggingRequestDto) {
         log.info("Logging Controller in postLogging()");
         loggingService.postLogging();
         return ResponseEntity.ok()
-                .body(postLoggingRequestDto.toString());
+                .body(postLoggingRequestDto);
     }
 
     @GetMapping("/exception")
