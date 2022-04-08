@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @Slf4j
-//@Aspect
-//@Component
+@Aspect
+@Component
 @RequiredArgsConstructor
 public class LogAspect {
 
@@ -36,13 +36,8 @@ public class LogAspect {
 
     @Before("controllerPointCut()")
     public void beforeLog(JoinPoint joinPoint) {
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         putLogType(LogType.ACTION);
-        try {
-            log.info(objectMapper.writeValueAsString(LogPost.of(request.getMethod(), request.getRequestURI(), convertJsonParam(joinPoint.getArgs()))));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        log.info(convertJsonParam(joinPoint.getArgs()));
         putLogType(LogType.SERVICE);
     }
 
@@ -67,23 +62,5 @@ public class LogAspect {
 
     private void putLogType(LogType logType) {
         MDC.put("l.type", String.valueOf(logType));
-    }
-
-    @Getter
-    @ToString
-    protected static class LogPost {
-        private final String method;
-        private final String url;
-        private final String args;
-
-        private LogPost(String method, String url, String args) {
-            this.method = method;
-            this.url = url;
-            this.args = args;
-        }
-
-        protected static LogPost of(String method, String url, String args) {
-            return new LogPost(method, url, args);
-        }
     }
 }

@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @Slf4j
-//@Aspect
-//@Component
+@Aspect
+@Component
 @RequiredArgsConstructor
 public class ErrorAspect {
 

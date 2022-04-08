@@ -1,16 +1,12 @@
 package com.example.logging.common.filter;
 
-import com.example.logging.common.constant.LogType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -19,19 +15,22 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Slf4j
-//@Component
+@Component
 @RequiredArgsConstructor
-public class LogFilter implements Filter {
+public class LogFilter extends OncePerRequestFilter {
 
-    private void putLogTsId() {
-        MDC.put("t.id", String.valueOf(UUID.randomUUID()));
+    private void putMDC(HttpServletRequest request) {
+        MDC.put("TXID", String.valueOf(UUID.randomUUID()).substring(0, 8));
+        MDC.put("METHOD", request.getMethod());
+        MDC.put("URI", request.getRequestURI());
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
-        putLogTsId();
-        chain.doFilter(requestWrapper, responseWrapper);
+        putMDC(request);
+        filterChain.doFilter(requestWrapper, responseWrapper);
+        responseWrapper.copyBodyToResponse();
     }
 }

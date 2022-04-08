@@ -3,30 +3,33 @@
     <!-- console -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%magenta([%d{yyyy:MM:dd HH:mm:ss.SSS}]) %highlight([%5level]) [%X{t.id}] %highlight([%7X{l.type}]) %-55cyan([%logger{36}:%L]) : %msg %n</pattern>
+            <pattern>%magenta([%d{yyyy:MM:dd HH:mm:ss.SSS}]) %highlight([%5level]) [%thread] %-55cyan([%logger{36}:%L]) : %msg %n</pattern>
         </encoder>
-        <springProfile name="json">
-            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-                <customFields>{"appName":"${appName}"}</customFields>
-            </encoder>
-        </springProfile>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./log/trace-json.log</file>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./log/trace_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxHistory>90</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <version/>
+                <logLevel/>
+                <threadName/>
+                <loggerName/>
+                <message />
+            </providers>
+            <includeMdcKeyName>IP</includeMdcKeyName>
+            <includeMdcKeyName>HOSTNAME</includeMdcKeyName>
+            <includeMdcKeyName>TXID</includeMdcKeyName>
+            <includeMdcKeyName>METHOD</includeMdcKeyName>
+            <includeMdcKeyName>URI</includeMdcKeyName>
+        </encoder>
     </appender>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE" />
+        <appender-ref ref="LOGSTASH"/>
     </root>
 </configuration>
