@@ -19,17 +19,26 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LogFilter extends OncePerRequestFilter {
 
+    private static final String TXID = "Txid";
+    private static final String METHOD = "Method";
+    private static final String URI = "Uri";
+
     private void putMDC(HttpServletRequest request) {
-        MDC.put("TXID", String.valueOf(UUID.randomUUID()).substring(0, 8));
-        MDC.put("METHOD", request.getMethod());
-        MDC.put("URI", request.getRequestURI());
+        if (MDC.get(TXID) == null || MDC.get(TXID).isEmpty()) {
+            MDC.put(TXID, String.valueOf(UUID.randomUUID()).substring(0, 8));
+        }
+
+        MDC.put(METHOD, request.getMethod());
+        MDC.put(URI, request.getRequestURI());
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) request);
-        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
+        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
         putMDC(request);
+        requestWrapper.setAttribute(TXID, MDC.get(TXID));
+        responseWrapper.setHeader(TXID, MDC.get(TXID));
         filterChain.doFilter(requestWrapper, responseWrapper);
         responseWrapper.copyBodyToResponse();
     }

@@ -20,11 +20,9 @@
                 <loggerName/>
                 <message />
             </providers>
-            <includeMdcKeyName>IP</includeMdcKeyName>
-            <includeMdcKeyName>HOSTNAME</includeMdcKeyName>
-            <includeMdcKeyName>TXID</includeMdcKeyName>
-            <includeMdcKeyName>METHOD</includeMdcKeyName>
-            <includeMdcKeyName>URI</includeMdcKeyName>
+            <includeMdcKeyName>Txid</includeMdcKeyName>
+            <includeMdcKeyName>Method</includeMdcKeyName>
+            <includeMdcKeyName>Uri</includeMdcKeyName>
         </encoder>
     </appender>
 
