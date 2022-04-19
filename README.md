@@ -22,8 +22,15 @@ Spring Boot Project 와 ELK stack 을 연동 해서 Log 통합 시스템을 만�
 
 ---
 # ELK Stack 이란 무엇인가요 ?
+<div align="center">
+  <img src="./image/elk-stack-logo.png" width="200" height="200" />
+</div>
 ELK 는 Elasticsearch, Logstash, Kibana 세가지 오픈 소스 이니셜 입니다.
+
 # Elasticsearch ?
+<div align="center">
+  <img src="./image/elasticsearch.png" width="200" height="200" />
+</div>
 Elasticsearch 는 Json 기반의 분산형 RESTful 검색 및 분석 엔진입니다.
 
 Apache Lucene 기반으로 구축되었으며, 분산형 및 개방형을 특징으로 합니다.
@@ -43,7 +50,9 @@ Lucene이 Java 로 개발되었기 때문에 Elasticsearch 또한 Java 로 개�
 - 기타
 
 # Kibana ?
-
+<div align="center">
+  <img src="./image/kibana.png" width="200" height="200" />
+</div>
 Elastic Stack 기반으로 구축된 오픈 소스 FE 애플리케이션으로, Elasticsearch 에서 색인된 데이터를 검색하여 분석 및 시각화 하는 기능 플랫폼입니다. 고급 데이터 분석을 쉽게 수행하고 다양한 차트, 테이블 및 맵에서 데이터를 시각화 가능합니다. Kibana는 Elasticsearch 의 결과를 보여주는 역할을 하고 있습니다.
 
 ## Kibana 의 주요 기능
@@ -66,7 +75,9 @@ Elastic Stack 기반으로 구축된 오픈 소스 FE 애플리케이션으로, 
 
 
 # Logstash ?
-
+<div align="center">
+  <img src="./image/logstash-logo-color.png" width="200" height="200" />
+</div>
 Logstash는 실시간 파이프 라인 기능을 가진 오픈소스 데이터 수집 엔진 입니다.
 
 Logstash는 Server-side 데이터 처리 파이프 라인으로 다양한 소스에서 동시에 데이터를 수집하고 통합합니다. 또한, 수집된 데이터를 정규화하여 Elasticsearch등의 목적지로 전송하는 역할을 합니다. 거의 대부분의 이벤트를 수집하여 변환 할 수 있으며, 기본으로 제공되는 여러 코덱을 이용해 수집 프로세스를 간소화할 수 있습니다.
@@ -79,11 +90,17 @@ Logstash는 Server-side 데이터 처리 파이프 라인으로 다양한 소스
 
 
 기존의 로그 확인 절차
+<div align="center">
+  <img src="./image/before.png" width="200" height="200" />
+</div>
 
 현재 기존의 원하는 로그를 찾기 위해 개발자는 각각의 서버에 접속 하여 Log 파일을 모두 열어 원하는 데이터를 찾으려 할 것입니다.
 
 
 ELK Stack 을 적용한 로그 확인 절차
+<div align="center">
+  <img src="./image/after.png" width="200" height="200" />
+</div>
 
 ELK Stack 을 적용하여 전과는 다르게 원하는 로그를 찾기 위해 개발자는 각각의 서버에 접속하는것이 아닌 데이터 파이프 라인인 Logstash 를 통해 Elasticsearch 에 데이터를 저장하고 색인된 데이터를 Kibana 를 통해 보기 때문에 각각의 서버의 로그를 모두 찾는 수고를 덜었습니다.
 
