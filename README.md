@@ -91,7 +91,7 @@ Logstash는 Server-side 데이터 처리 파이프 라인으로 다양한 소스
 
 기존의 로그 확인 절차
 <div align="center">
-  <img src="./image/before.png" width="200" height="200" />
+  <img src="./image/before.png" width="300" height="300" />
 </div>
 
 현재 기존의 원하는 로그를 찾기 위해 개발자는 각각의 서버에 접속 하여 Log 파일을 모두 열어 원하는 데이터를 찾으려 할 것입니다.
@@ -99,7 +99,7 @@ Logstash는 Server-side 데이터 처리 파이프 라인으로 다양한 소스
 
 ELK Stack 을 적용한 로그 확인 절차
 <div align="center">
-  <img src="./image/after.png" width="200" height="200" />
+  <img src="./image/after.png" width="300" height="300" />
 </div>
 
 ELK Stack 을 적용하여 전과는 다르게 원하는 로그를 찾기 위해 개발자는 각각의 서버에 접속하는것이 아닌 데이터 파이프 라인인 Logstash 를 통해 Elasticsearch 에 데이터를 저장하고 색인된 데이터를 Kibana 를 통해 보기 때문에 각각의 서버의 로그를 모두 찾는 수고를 덜었습니다.
